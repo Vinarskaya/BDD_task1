@@ -11,16 +11,9 @@ public class RechargeCardPage {
     private SelenideElement actionTransferButton = $("[data-test-id=action-transfer] .button__content");
     private SelenideElement actionCancelButton = $("[data-test-id=action-cancel] .button__content");
 
-    public DashboardPage transferMoneyToFirstCard(String amount, DataHelper.CardNumberInfo info) {
+    public DashboardPage transferMoneyToCard(String amount, DataHelper.Card info) {
         amountField.setValue(amount);
-        fromField.setValue(info.getSecondCardNumber());
-        actionTransferButton.click();
-        return new DashboardPage();
-    }
-
-    public DashboardPage transferMoneyToSecondCard(String amount, DataHelper.CardNumberInfo info) {
-        amountField.setValue(amount);
-        fromField.setValue(info.getFirstCardNumber());
+        fromField.setValue(info.getCardNumber());
         actionTransferButton.click();
         return new DashboardPage();
     }

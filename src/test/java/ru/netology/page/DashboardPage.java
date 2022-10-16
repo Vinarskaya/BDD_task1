@@ -19,8 +19,8 @@ public class DashboardPage {
     public DashboardPage() {
     }
 
-    public int getCardBalance(String id) {
-        val card = cards.findBy(Condition.attribute("data-test-id", id));
+    public int getCardBalance(DataHelper.Card info) {
+        val card = cards.findBy(Condition.attribute("data-test-id", info.getId()));
         val text = card.text();
         return extractBalance(text);
     }
@@ -32,17 +32,11 @@ public class DashboardPage {
         return Integer.parseInt(value);
     }
 
-    public RechargeCardPage RechargeFirstCard(DataHelper.CardNumberInfo info) {
-        var fourLastNumbers = info.getFirstCardNumber().substring(15);
-        cards.first().shouldHave(Condition.text(fourLastNumbers));
-        buttons.first().click();
-        return new RechargeCardPage();
-    }
-
-    public RechargeCardPage RechargeSecondCard(DataHelper.CardNumberInfo info) {
-        var fourLastNumbers = info.getSecondCardNumber().substring(15);
-        cards.last().shouldHave(Condition.text(fourLastNumbers));
-        buttons.last().click();
+    public RechargeCardPage CardSelection(DataHelper.Card info) {
+        val card = cards.findBy(Condition.attribute("data-test-id", info.getId()));
+        val indexOfSelenideElement = cards.indexOf(card);
+        val button = buttons.get(indexOfSelenideElement);
+        button.click();
         return new RechargeCardPage();
     }
 

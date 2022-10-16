@@ -2,6 +2,7 @@ package ru.netology.test;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ru.netology.data.DataHelper;
 import ru.netology.page.LoginPage;
@@ -12,9 +13,6 @@ public class MoneyTransferTests {
 
     String firstAmount = "500";
     String secondAmount = "1000";
-    ElementsCollection cardsInfo = $$(".list__item div");
-    String firstId = "92df3f1c-a033-48e6-8390-206f6b1f56c0";
-    String secondId = "0f3f5c2a-249e-4c3d-8287-09f7a039391d";
 
     @Test
     void transferMoneyFromFirstCardToSecond() {
@@ -23,14 +21,19 @@ public class MoneyTransferTests {
         var verificationPage = loginPage.validLogin(authInfo);
         var verificationCode = DataHelper.getVerificationCodeFor(authInfo);
         var dashboardPage = verificationPage.validVerify(verificationCode);
-        var cardNumberInfo = DataHelper.getCardNumberInfoFor(authInfo);
-        var rechargeCardPage = dashboardPage.RechargeSecondCard(cardNumberInfo);
-        var dashboardPageAfterTransfer = rechargeCardPage.transferMoneyToSecondCard(firstAmount, cardNumberInfo);
+        var firstCardInfo = DataHelper.getFirstCardInfo(authInfo);
+        var secondCardInfo = DataHelper.getSecondCardInfo(authInfo);
+        var firstCardBalanceBeforeTransaction = dashboardPage.getCardBalance(firstCardInfo);
+        var secondCardBalanceBeforeTransaction = dashboardPage.getCardBalance(secondCardInfo);
+        var rechargeCardPage = dashboardPage.CardSelection(secondCardInfo);
+        var dashboardPageAfterTransfer = rechargeCardPage.transferMoneyToCard(firstAmount, firstCardInfo);
         dashboardPageAfterTransfer.UpdateInfo();
-        var actualFirstCardBalance = dashboardPageAfterTransfer.getCardBalance(firstId);
-        var actualSecondCardBalance = dashboardPageAfterTransfer.getCardBalance(secondId);
-        cardsInfo.first().shouldHave(Condition.text(String.valueOf(actualFirstCardBalance)));
-        cardsInfo.last().shouldHave(Condition.text(String.valueOf(actualSecondCardBalance)));
+        var expectedFirstCardBalance = firstCardBalanceBeforeTransaction - Integer.parseInt(firstAmount);
+        var expectedSecondCardBalance = secondCardBalanceBeforeTransaction + Integer.parseInt(firstAmount);
+        var actualFirstCardBalance = dashboardPageAfterTransfer.getCardBalance(firstCardInfo);
+        var actualSecondCardBalance = dashboardPageAfterTransfer.getCardBalance(secondCardInfo);
+        Assertions.assertEquals(expectedFirstCardBalance, actualFirstCardBalance);
+        Assertions.assertEquals(expectedSecondCardBalance, actualSecondCardBalance);
     }
 
     @Test
@@ -40,13 +43,18 @@ public class MoneyTransferTests {
         var verificationPage = loginPage.validLogin(authInfo);
         var verificationCode = DataHelper.getVerificationCodeFor(authInfo);
         var dashboardPage = verificationPage.validVerify(verificationCode);
-        var cardNumberInfo = DataHelper.getCardNumberInfoFor(authInfo);
-        var rechargeCardPage = dashboardPage.RechargeFirstCard(cardNumberInfo);
-        var dashboardPageAfterTransfer = rechargeCardPage.transferMoneyToFirstCard(secondAmount, cardNumberInfo);
+        var firstCardInfo = DataHelper.getFirstCardInfo(authInfo);
+        var secondCardInfo = DataHelper.getSecondCardInfo(authInfo);
+        var firstCardBalanceBeforeTransaction = dashboardPage.getCardBalance(firstCardInfo);
+        var secondCardBalanceBeforeTransaction = dashboardPage.getCardBalance(secondCardInfo);
+        var rechargeCardPage = dashboardPage.CardSelection(firstCardInfo);
+        var dashboardPageAfterTransfer = rechargeCardPage.transferMoneyToCard(secondAmount, secondCardInfo);
         dashboardPageAfterTransfer.UpdateInfo();
-        var actualFirstCardBalance = dashboardPageAfterTransfer.getCardBalance(firstId);
-        var actualSecondCardBalance = dashboardPageAfterTransfer.getCardBalance(secondId);
-        cardsInfo.first().shouldHave(Condition.text(String.valueOf(actualFirstCardBalance)));
-        cardsInfo.last().shouldHave(Condition.text(String.valueOf(actualSecondCardBalance)));
+        var expectedFirstCardBalance = firstCardBalanceBeforeTransaction + Integer.parseInt(secondAmount);
+        var expectedSecondCardBalance = secondCardBalanceBeforeTransaction - Integer.parseInt(secondAmount);
+        var actualFirstCardBalance = dashboardPageAfterTransfer.getCardBalance(firstCardInfo);
+        var actualSecondCardBalance = dashboardPageAfterTransfer.getCardBalance(secondCardInfo);
+        Assertions.assertEquals(expectedFirstCardBalance, actualFirstCardBalance);
+        Assertions.assertEquals(expectedSecondCardBalance, actualSecondCardBalance);
     }
 }

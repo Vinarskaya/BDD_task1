@@ -24,23 +24,17 @@ public class DataHelper {
     }
 
     @Value
-    public static class CardNumberInfo {
-        private String firstCardNumber;
-        private String secondCardNumber;
+    public static class Card {
+        private String cardNumber;
+        private String openingBalance;
+        private String id;
     }
 
-    public static CardNumberInfo getCardNumberInfoFor(AuthInfo authInfo) {
-        return new CardNumberInfo("5559 0000 0000 0001", "5559 0000 0000 0002");
+    public static Card getFirstCardInfo(AuthInfo authInfo) {
+        return new Card("5559 0000 0000 0001", "10 000", "92df3f1c-a033-48e6-8390-206f6b1f56c0");
     }
 
-    @Value
-    public static class CardBalanceInfo {
-        private int firstCardBalance;
-        private int secondCardBalance;
+    public static Card getSecondCardInfo(AuthInfo authInfo) {
+        return new Card("5559 0000 0000 0002", "10 000", "0f3f5c2a-249e-4c3d-8287-09f7a039391d");
     }
-
-    public static CardBalanceInfo getBalanceCardInfoFor(AuthInfo authInfo) {
-        return new CardBalanceInfo(10000, 10000);
-    }
-
 }
