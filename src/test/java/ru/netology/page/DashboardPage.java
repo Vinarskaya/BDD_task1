@@ -15,6 +15,7 @@ public class DashboardPage {
     private final String balanceStart = "баланс: ";
     private final String balanceFinish = " р.";
     private SelenideElement updateButton = $("[data-test-id=action-reload] .button__text");
+    private SelenideElement errorNotification = $("[data-test-id=error-notification]");
 
     public DashboardPage() {
     }
@@ -22,7 +23,11 @@ public class DashboardPage {
     public int getCardBalance(DataHelper.Card info) {
         val card = cards.findBy(Condition.attribute("data-test-id", info.getId()));
         val text = card.text();
-        return extractBalance(text);
+        val balance = extractBalance(text);
+        if (balance < 0) {
+            errorNotification.shouldBe(Condition.visible);
+        }
+        return balance;
     }
 
     private int extractBalance(String text) {
