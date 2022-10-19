@@ -26,13 +26,13 @@ public class MoneyTransferTests {
         var secondCardInfo = DataHelper.getSecondCardInfo(authInfo);
         var firstCardBalanceBeforeTransaction = dashboardPage.getCardBalance(firstCardInfo);
         var secondCardBalanceBeforeTransaction = dashboardPage.getCardBalance(secondCardInfo);
-        var rechargeCardPage = dashboardPage.CardSelection(secondCardInfo);
-        var dashboardPageAfterTransaction = rechargeCardPage.transferMoneyToCard(firstAmount, firstCardInfo);
-        dashboardPageAfterTransaction.UpdateInfo();
+        var rechargeCardPage = dashboardPage.cardSelection(secondCardInfo);
+        rechargeCardPage.transferMoneyToCard(firstAmount, firstCardInfo, firstCardBalanceBeforeTransaction);
+        dashboardPage.updateInfo();
         var expectedFirstCardBalance = firstCardBalanceBeforeTransaction - Integer.parseInt(firstAmount);
         var expectedSecondCardBalance = secondCardBalanceBeforeTransaction + Integer.parseInt(firstAmount);
-        var actualFirstCardBalance = dashboardPageAfterTransaction.getCardBalance(firstCardInfo);
-        var actualSecondCardBalance = dashboardPageAfterTransaction.getCardBalance(secondCardInfo);
+        var actualFirstCardBalance = dashboardPage.getCardBalance(firstCardInfo);
+        var actualSecondCardBalance = dashboardPage.getCardBalance(secondCardInfo);
         Assertions.assertEquals(expectedFirstCardBalance, actualFirstCardBalance);
         Assertions.assertEquals(expectedSecondCardBalance, actualSecondCardBalance);
     }
@@ -48,13 +48,13 @@ public class MoneyTransferTests {
         var secondCardInfo = DataHelper.getSecondCardInfo(authInfo);
         var firstCardBalanceBeforeTransaction = dashboardPage.getCardBalance(firstCardInfo);
         var secondCardBalanceBeforeTransaction = dashboardPage.getCardBalance(secondCardInfo);
-        var rechargeCardPage = dashboardPage.CardSelection(firstCardInfo);
-        var dashboardPageAfterTransaction = rechargeCardPage.transferMoneyToCard(secondAmount, secondCardInfo);
-        dashboardPageAfterTransaction.UpdateInfo();
+        var rechargeCardPage = dashboardPage.cardSelection(firstCardInfo);
+        rechargeCardPage.transferMoneyToCard(secondAmount, secondCardInfo, secondCardBalanceBeforeTransaction);
+        dashboardPage.updateInfo();
         var expectedFirstCardBalance = firstCardBalanceBeforeTransaction + Integer.parseInt(secondAmount);
         var expectedSecondCardBalance = secondCardBalanceBeforeTransaction - Integer.parseInt(secondAmount);
-        var actualFirstCardBalance = dashboardPageAfterTransaction.getCardBalance(firstCardInfo);
-        var actualSecondCardBalance = dashboardPageAfterTransaction.getCardBalance(secondCardInfo);
+        var actualFirstCardBalance = dashboardPage.getCardBalance(firstCardInfo);
+        var actualSecondCardBalance = dashboardPage.getCardBalance(secondCardInfo);
         Assertions.assertEquals(expectedFirstCardBalance, actualFirstCardBalance);
         Assertions.assertEquals(expectedSecondCardBalance, actualSecondCardBalance);
     }
@@ -70,8 +70,7 @@ public class MoneyTransferTests {
         var secondCardInfo = DataHelper.getSecondCardInfo(authInfo);
         var secondCardBalanceBeforeTransaction = dashboardPage.getCardBalance(secondCardInfo);
         var thirdAmount = String.valueOf(secondCardBalanceBeforeTransaction + 1000);
-        var rechargeCardPage = dashboardPage.CardSelection(firstCardInfo);
-        var dashboardPageAfterTransaction = rechargeCardPage.transferMoneyToCard(thirdAmount, secondCardInfo);
-        dashboardPageAfterTransaction.getCardBalance(secondCardInfo);
+        var rechargeCardPage = dashboardPage.cardSelection(firstCardInfo);
+        rechargeCardPage.transferMoneyToCard(thirdAmount, secondCardInfo, secondCardBalanceBeforeTransaction);
     }
 }

@@ -15,7 +15,6 @@ public class DashboardPage {
     private final String balanceStart = "баланс: ";
     private final String balanceFinish = " р.";
     private SelenideElement updateButton = $("[data-test-id=action-reload] .button__text");
-    private SelenideElement errorNotification = $("[data-test-id=error-notification]");
 
     public DashboardPage() {
     }
@@ -23,11 +22,7 @@ public class DashboardPage {
     public int getCardBalance(DataHelper.Card info) {
         val card = cards.findBy(Condition.attribute("data-test-id", info.getId()));
         val text = card.text();
-        val balance = extractBalance(text);
-        if (balance < 0) {
-            errorNotification.shouldBe(Condition.visible);
-        }
-        return balance;
+        return extractBalance(text);
     }
 
     private int extractBalance(String text) {
@@ -37,7 +32,7 @@ public class DashboardPage {
         return Integer.parseInt(value);
     }
 
-    public RechargeCardPage CardSelection(DataHelper.Card info) {
+    public RechargeCardPage cardSelection(DataHelper.Card info) {
         val card = cards.findBy(Condition.attribute("data-test-id", info.getId()));
         val indexOfSelenideElement = cards.indexOf(card);
         val button = buttons.get(indexOfSelenideElement);
@@ -45,7 +40,7 @@ public class DashboardPage {
         return new RechargeCardPage();
     }
 
-    public DashboardPage UpdateInfo() {
+    public DashboardPage updateInfo() {
         updateButton.click();
         return new DashboardPage();
     }

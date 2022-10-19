@@ -1,5 +1,6 @@
 package ru.netology.page;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import ru.netology.data.DataHelper;
 
@@ -10,12 +11,19 @@ public class RechargeCardPage {
     private SelenideElement fromField = $("[data-test-id=from] input");
     private SelenideElement actionTransferButton = $("[data-test-id=action-transfer] .button__content");
     private SelenideElement actionCancelButton = $("[data-test-id=action-cancel] .button__content");
+    private SelenideElement errorNotification = $("[data-test-id=error-notification]");
 
-    public DashboardPage transferMoneyToCard(String amount, DataHelper.Card info) {
-        amountField.setValue(amount);
+    public void transferMoneyToCard(String transferAmount, DataHelper.Card info, int cardBalanceBeforeTransaction ) {
+        amountField.setValue(transferAmount);
         fromField.setValue(info.getCardNumber());
         actionTransferButton.click();
-        return new DashboardPage();
+        possibilityOfPayment(cardBalanceBeforeTransaction, transferAmount);
+    }
+
+    public void possibilityOfPayment (int cardBalanceBeforeTransaction, String transferAmount) {
+        if (cardBalanceBeforeTransaction < Integer.parseInt(transferAmount)) {
+            errorNotification.shouldBe(Condition.visible);
+        }
     }
 
     public DashboardPage interruptTheOperation() {
