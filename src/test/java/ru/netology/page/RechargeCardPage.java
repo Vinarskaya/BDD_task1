@@ -10,7 +10,6 @@ public class RechargeCardPage {
     private SelenideElement amountField = $("[data-test-id=amount] input");
     private SelenideElement fromField = $("[data-test-id=from] input");
     private SelenideElement actionTransferButton = $("[data-test-id=action-transfer] .button__content");
-    private SelenideElement actionCancelButton = $("[data-test-id=action-cancel] .button__content");
     private SelenideElement errorNotification = $("[data-test-id=error-notification]");
 
     public void transferMoneyToCard(String transferAmount, DataHelper.Card info, int cardBalanceBeforeTransaction ) {
@@ -24,11 +23,6 @@ public class RechargeCardPage {
         if (cardBalanceBeforeTransaction < Integer.parseInt(transferAmount)) {
             errorNotification.shouldBe(Condition.visible);
         }
-    }
-
-    public DashboardPage interruptTheOperation() {
-        actionCancelButton.click();
-        return new DashboardPage();
     }
 }
 

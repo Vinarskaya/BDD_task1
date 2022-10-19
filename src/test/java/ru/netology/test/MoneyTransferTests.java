@@ -28,7 +28,6 @@ public class MoneyTransferTests {
         var secondCardBalanceBeforeTransaction = dashboardPage.getCardBalance(secondCardInfo);
         var rechargeCardPage = dashboardPage.cardSelection(secondCardInfo);
         rechargeCardPage.transferMoneyToCard(firstAmount, firstCardInfo, firstCardBalanceBeforeTransaction);
-        dashboardPage.updateInfo();
         var expectedFirstCardBalance = firstCardBalanceBeforeTransaction - Integer.parseInt(firstAmount);
         var expectedSecondCardBalance = secondCardBalanceBeforeTransaction + Integer.parseInt(firstAmount);
         var actualFirstCardBalance = dashboardPage.getCardBalance(firstCardInfo);
@@ -50,7 +49,6 @@ public class MoneyTransferTests {
         var secondCardBalanceBeforeTransaction = dashboardPage.getCardBalance(secondCardInfo);
         var rechargeCardPage = dashboardPage.cardSelection(firstCardInfo);
         rechargeCardPage.transferMoneyToCard(secondAmount, secondCardInfo, secondCardBalanceBeforeTransaction);
-        dashboardPage.updateInfo();
         var expectedFirstCardBalance = firstCardBalanceBeforeTransaction + Integer.parseInt(secondAmount);
         var expectedSecondCardBalance = secondCardBalanceBeforeTransaction - Integer.parseInt(secondAmount);
         var actualFirstCardBalance = dashboardPage.getCardBalance(firstCardInfo);

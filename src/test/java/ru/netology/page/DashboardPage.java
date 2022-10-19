@@ -20,6 +20,7 @@ public class DashboardPage {
     }
 
     public int getCardBalance(DataHelper.Card info) {
+        updateInfo();
         val card = cards.findBy(Condition.attribute("data-test-id", info.getId()));
         val text = card.text();
         return extractBalance(text);
@@ -40,8 +41,7 @@ public class DashboardPage {
         return new RechargeCardPage();
     }
 
-    public DashboardPage updateInfo() {
+    public void updateInfo() {
         updateButton.click();
-        return new DashboardPage();
     }
 }
