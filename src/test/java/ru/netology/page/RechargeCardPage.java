@@ -12,17 +12,14 @@ public class RechargeCardPage {
     private SelenideElement actionTransferButton = $("[data-test-id=action-transfer] .button__content");
     private SelenideElement errorNotification = $("[data-test-id=error-notification]");
 
-    public void transferMoneyToCard(String transferAmount, DataHelper.Card info, int cardBalanceBeforeTransaction ) {
+    public void transferMoneyToCard(String transferAmount, DataHelper.Card info) {
         amountField.setValue(transferAmount);
         fromField.setValue(info.getCardNumber());
         actionTransferButton.click();
-        possibilityOfPayment(cardBalanceBeforeTransaction, transferAmount);
     }
 
-    public void possibilityOfPayment (int cardBalanceBeforeTransaction, String transferAmount) {
-        if (cardBalanceBeforeTransaction < Integer.parseInt(transferAmount)) {
-            errorNotification.shouldBe(Condition.visible);
-        }
+    public void possibilityOfPayment() {
+        errorNotification.shouldBe(Condition.visible);
     }
 }
 
